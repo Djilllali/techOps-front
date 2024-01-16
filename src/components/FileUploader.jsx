@@ -1,68 +1,53 @@
 import React, { useRef, useState } from "react";
+import "./FileUpload.css";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 const FileUploader = () => {
-  const inputRef = useRef();
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState({
-    percentage: 0,
-    visible: false,
-  });
+  const fileInputRef = useRef();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("select");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [link, setLink] = useState(null);
+  const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
+
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
+      const file = event.target.files[0];
+
+      // Check if the file is a CSV file
+      if (file.type !== "text/csv") {
+        toast.error("Please select a CSV file.");
+        return;
+      }
+
+      setSelectedFile(file);
     }
   };
-  const handleUpload = async () => {
-    setSnackbarOpen(false);
-    setLoading(true);
-    setProgress({ percentage: 0, visible: true });
 
-    try {
-      const formData = new FormData();
-      formData.append("csvFile", file);
-
-      const response = await axios.post(
-        "http://localhost:3001/api/upload",
-        formData,
-        {
-          onUploadProgress: (progressEvent) => {
-            const progress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            setProgress((prevProgress) => ({
-              ...prevProgress,
-              percentage: progress,
-            }));
-          },
-        }
-      );
-
-      console.log("Upload successful:", response.data);
-    } catch (error) {
-      console.error(
-        "Error uploading file:",
-        error.response?.data || error.message
-      );
-      setSnackbarMessage("Error uploading file. Please try again.");
-      setSnackbarOpen(true);
-    } finally {
-      setLoading(false);
-      setProgress({ percentage: 0, visible: false });
-    }
+  const onFileChosen = () => {
+    fileInputRef.current.click();
   };
+
+
   return (
     <div>
-      <input ref={inputRef} type="file" onChange={handleFileChange} />
-      <button
-        onClick={handleUpload}
-        disabled={!file || loading}
-        className="file-btn"
-      >
-        <span className="material-symbols-outlined">upload</span>
-        {loading ? "Uploading..." : "Upload CSV"}
-      </button>
-    </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
+
+      {!selectedFile && (
+        <button className="file-btn" onClick={onFileChosen}>
+          <span className="material-symbols-outlined">upload</span> Upload File
+        </button>
+      )}
+
+      
   );
 };
 
