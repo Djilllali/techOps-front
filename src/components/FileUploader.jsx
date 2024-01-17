@@ -86,19 +86,15 @@ const FileUploader = () => {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const response = await axios.post(
-        "http://localhost:3001/api/upload",
-        formData,
-        {
-          onUploadProgress: (progressEvent) => {
-            const progress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            setUploadProgress(progress);
-            if (progress === 100) toast.success("File uploaded successfully");
-          },
-        }
-      );
+      const response = await axios.post(apiUrl + "/api/upload", formData, {
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setUploadProgress(progress);
+          if (progress === 100) toast.success("File uploaded successfully");
+        },
+      });
 
       setLink(response.data);
     } catch (error) {
