@@ -95,7 +95,7 @@ const FileUploader = () => {
               (progressEvent.loaded * 100) / progressEvent.total
             );
             setUploadProgress(progress);
-            progress === 100 && toast.success("File uploaded successfully");
+            if (progress === 100) toast.success("File uploaded successfully");
           },
         }
       );
