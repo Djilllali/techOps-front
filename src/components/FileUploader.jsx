@@ -8,6 +8,13 @@ import FileCard from "./FileCard";
 import ProcessingCard from "./ProcessingCard";
 import UploadButton from "./UploadButton";
 
+/**
+ * Composant FileUploader pour gérer le téléchargement de fichiers.
+ *
+ * @component
+ * @returns {JSX.Element} Composant React.
+ */
+
 const FileUploader = () => {
   const fileInputRef = useRef();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -15,6 +22,12 @@ const FileUploader = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [link, setLink] = useState(null);
   const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
+
+  /**
+   * Fonction pour gérer le changement de fichier.
+   *
+   * @param {Object} event - L'événement de changement de fichier.
+   */
 
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -30,12 +43,16 @@ const FileUploader = () => {
       console.log("selectedFile", selectedFile);
     }
   };
-
+  /**
+   * Fonction pour déclencher la sélection de fichier.
+   */
   const onFileChosen = () => {
     console.log("click");
     fileInputRef.current.click();
   };
-
+  /**
+   * Fonction pour effacer le fichier sélectionné.
+   */
   const clearFileInput = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -44,11 +61,15 @@ const FileUploader = () => {
     setUploadProgress(0);
     setUploadStatus("select");
   };
-
+  /**
+   * Fonction pour gérer le téléchargement  du fichier .zip finale.
+   */
   const handleDownload = () => {
     link && window.open(apiUrl + link.downloadLink);
   };
-
+  /**
+   * Fonction pour gérer le téléchargement du fichier.
+   */
   const handleUpload = async () => {
     if (!selectedFile) {
       toast.error("Please select a file.");
