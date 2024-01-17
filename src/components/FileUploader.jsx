@@ -80,7 +80,6 @@ const FileUploader = () => {
       );
 
       setLink(response.data);
-      setUploadStatus("done");
     } catch (error) {
       toast.error(error.response?.data || error.message);
 
@@ -101,7 +100,7 @@ const FileUploader = () => {
           onFileChosen={onFileChosen}
         />
       )}
-
+      {console.log("uploadStatus", uploadStatus)}
       {selectedFile && (
         <>
           <FileCard
@@ -117,10 +116,12 @@ const FileUploader = () => {
             handleDownload={handleDownload}
           />
 
-          <UploadButton
-            uploadStatus={uploadStatus}
-            handleUpload={handleUpload}
-          />
+          {uploadProgress === 0 && (
+            <UploadButton
+              uploadStatus={uploadStatus}
+              handleUpload={handleUpload}
+            />
+          )}
         </>
       )}
     </div>

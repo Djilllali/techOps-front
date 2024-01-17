@@ -10,7 +10,7 @@ const FileInput = ({ fileInputRef, handleFileChange, onFileChosen }) => {
         style={{ display: "none" }}
       />
       <button className="file-btn" onClick={onFileChosen}>
-        <span className="material-symbols-outlined">upload</span> Upload File
+        <span className="material-symbols-outlined">upload</span> Select a file
       </button>
     </div>
   );
